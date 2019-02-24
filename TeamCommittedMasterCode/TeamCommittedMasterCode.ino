@@ -1,5 +1,4 @@
 
-
 // motor pins
 const int m1_1 = 8;
 const int m1_2 = 7;
@@ -19,9 +18,14 @@ bool fullSpeedAhead = true;
 #include <Encoder.h>
 #include <Wire.h>
 #include <VL6180X.h>
+#include <LSM6.h>
 
 VL6180X sensor1;
 VL6180X sensor2;
+LSM6 accSens;
+
+
+char report[80];
 
 // create encoder knobLeft() w/ ports 2 and 4
 // create encode knobRight() w/ ports 3 and 5
@@ -81,6 +85,9 @@ void setup() {
   delay(500);
 
 
+  // initialize accelerometer
+  accSens.init();
+  accSens.enableDefault();
 }
 
 
@@ -184,14 +191,30 @@ void alignment(int sped, int newLeft, int newRight) {
 
 void loop() {
 
-//Encoder Stuff
-long newLeft, newRight;
- newLeft = knobLeft.read();
- newRight = -knobRight.read();
+  //Encoder Stuff
+  long newLeft, newRight;
+  newLeft = knobLeft.read();
+  newRight = -knobRight.read();
 
-long sensor1Val, sensor2Val;
-sensor1Val = sensor1.readRangeSingle();
-sensor2Val = sensor2.readRangeSingle();
+  // distance sensor stuff
+  long sensor1Val, sensor2Val;
+  sensor1Val = sensor1.readRangeSingle();
+  sensor2Val = sensor2.readRangeSingle();
+
+//  // read gyro value
+//  accSens.readGyro();
+//  delay(50);
+//
+//  // print gyro values
+//  Serial.println(accSens.g.x);
+//  Serial.println(accSens.g.y);
+//  Serial.println(accSens.g.z);
+
+  // print accelerometer/gyro data
+  snprintf(report, sizeof(report), "A: %6d %6d %6d    G: %6d %6d %6d",
+  accSens.a.x, accSens.a.y, accSens.a.z,
+  accSens.g.x, accSens.g.y, accSens.g.z);
+  Serial.println(report);
 
   Serial.print("Sensor 1: ");
   Serial.print(sensor1Val);
