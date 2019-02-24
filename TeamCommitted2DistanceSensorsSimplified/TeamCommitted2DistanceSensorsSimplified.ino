@@ -1,6 +1,6 @@
 
 // distance sensor CE pins
-const int cePin1 = 0;
+const int cePin1 = 4;
 const int cePin2 = 2;
 
 // include sensor library
@@ -19,7 +19,9 @@ void setup() {
   // begin wire??
   Wire.begin();
 
-  // turn CE pins of both sensors off
+  // initialize and turn CE pins of both sensors off
+  pinMode(cePin1, OUTPUT);
+  pinMode(cePin2, OUTPUT);  
   digitalWrite(cePin2, LOW);
   digitalWrite(cePin1, LOW);
   delay(500);
@@ -40,8 +42,6 @@ void setup() {
   sensor1.stopContinuous();
   delay(500);
 
-  // turn CE pin 1 off
-  digitalWrite(cePin1, LOW);
   // turn CE pin 2 on
   digitalWrite(cePin2, HIGH);
   delay(50);
@@ -49,7 +49,7 @@ void setup() {
   // initialize sensor 2 and set different address from sensor 1
   sensor2.init();
   sensor2.configureDefault();
-  sensor2.setAddress(0x29);
+  sensor2.setAddress(0x31);
   sensor2.writeReg(VL6180X::SYSRANGE__MAX_CONVERGENCE_TIME, 30);
   sensor2.writeReg16Bit(VL6180X::SYSALS__INTEGRATION_PERIOD, 50);
   sensor2.setTimeout(500);
@@ -57,9 +57,6 @@ void setup() {
   // stop sensor 2 for now
   sensor2.stopContinuous();
   delay(500);
-
-  // turn CE pin 1 back on
-  digitalWrite(cePin1, HIGH);
 
 }
 
@@ -70,7 +67,9 @@ void loop() {
  
   // store sensor values
   sensor1Val = sensor1.readRangeSingle();
+  delay(50);
   sensor2Val = sensor2.readRangeSingle();
+  delay(50);
 
   // print sensor values
   Serial.print("Sensor 1: ");
