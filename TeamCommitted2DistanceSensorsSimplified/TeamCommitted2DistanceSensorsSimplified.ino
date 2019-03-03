@@ -1,7 +1,7 @@
 
 // distance sensor CE pins
-const int cePin1 = 4;
-const int cePin2 = 2;
+const int cePin1 = 2;
+const int cePin2 = 4;
 
 // include sensor library
 #include <VL6180X.h>
