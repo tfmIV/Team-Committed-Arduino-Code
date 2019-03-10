@@ -6,6 +6,8 @@ int south = 2;
 int east = 1;
 int west = 3;
 int facing = 0;
+int currentX = 0;
+int currentY = mazeSize;
 
 bool wallBehind = true;
 
@@ -58,6 +60,9 @@ bool isWallWest() {
 }
 
 void moveNorth() {
+	if (currentY == 0) return;
+	if (isWallNorth()) return;
+
 	if (facing == 0) {
 		goOneSquare();
 	} else if (facing == 1) {
@@ -71,9 +76,13 @@ void moveNorth() {
 		turnRight90();
 		goOneSquare();
 	}
+	currentY--;
 }
 
 void moveSouth() {
+	if (currentY == mazeSize) return;
+	if (isWallSouth()) return;
+
 	if (facing == 0) {
 		turnLeft90();
 		turnLeft90();
@@ -87,9 +96,13 @@ void moveSouth() {
 		turnLeft90();
 		goOneSquare();
 	}
+	currentY++;
 }
 
 void moveEast() {
+	if (currentX == mazeSize) return;
+	if (isWallEast()) return;
+
 	if (facing == 0) {
 		turnRight90();
 		goOneSquare();
@@ -103,9 +116,13 @@ void moveEast() {
 		turnLeft90();
 		goOneSquare();
 	}
+	currentX++;
 }
 
 void moveWest() {
+	if (currentX == 0) return;
+	if (isWallWest()) return;
+
 	if (facing == 0) {
 		turnLeft90();
 		goOneSquare();
@@ -119,6 +136,10 @@ void moveWest() {
 	} else {
 		goOneSquare();
 	}
+	currentX--;
 }
+
+
+
 
 #endif
